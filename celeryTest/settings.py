@@ -153,18 +153,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #追記
-"""
+
 CACHES = {
     "default": {
-         "BACKEND": "redis_cache.RedisCache",
-         "LOCATION": os.environ.get('REDIS_URL'),
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get('REDIS_URL'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
-"""
+
 
 CELERY_BROKER_URL = os.environ.get("REDIS_URL")
-CELERY_RESULT_BACKEND = 'django-db'
-#CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
+#CELERY_RESULT_BACKEND = 'django-db'
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
 
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
