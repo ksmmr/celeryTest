@@ -1,0 +1,1 @@
+web: gunicorn celeryTest.wsgi --log-file -
