@@ -44,3 +44,4 @@ python-crontab==2.6.0
 redis==3.5.3
 vine==5.0.0
 wcwidth==0.2.5
+django-redis-cache==3.0.0
