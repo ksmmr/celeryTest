@@ -8,3 +8,6 @@ def add():
 	y = 10 + 10
 	print('add関数処理完了')
 	return y
+
+def debug_task():
+	print("debug_task呼び出し")

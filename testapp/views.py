@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from celery.result import AsyncResult
-from celeryTest.tasks import add
+from celeryTest.tasks import add,debug_task
 from .forms import DayCreateForm
 from .models import Day
 # TaskResultをインポート
@@ -11,6 +11,7 @@ def celery_test(request):
 	result = add.delay()  # 非同期処理の呼び出しはこれだけでOK。後は非同期に処理が流れていく
 
 	print("add.delay終了")
+	debug_task()
 
 	task_id = result.id  # 一意に割り振られたIDが確認できる。
 

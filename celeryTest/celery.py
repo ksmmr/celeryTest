@@ -2,7 +2,7 @@ import os
 from celery import Celery
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celeryTest.settings')
-app = Celery('celeryTest')
+app = Celery('celeryTest',broker=os.environ.get("REDIS_URL"))#変更済
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
