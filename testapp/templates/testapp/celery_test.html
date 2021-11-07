@@ -4,34 +4,11 @@
 </head>
 <body>
 	<h1>非同期処理TEST結果</h1>
-    <!--
+
 	<p>{{ result }}</p>
 	<p>{{ result.state }}</p>
 	<p>{{ result.ready }}</p>
-	-->
-<table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Task Id</th>
-          <th>Task Name</th>
-          <th>Status</th>
-          <th>Result</th>
-          <th>Date Done</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for object in object_list %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ object.task_id }}</td>
-          <td>{{ object.task_name }}</td>
-          <td>{{ object.status }}</td>
-          <td>{{ object.result }}</td>
-          <td>{{ object.date_done }}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+
+
 </body>
 </html>
