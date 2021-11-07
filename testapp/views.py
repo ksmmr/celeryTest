@@ -16,7 +16,7 @@ def celery_test(request):
 
 	print('task_id:', task_id)
 
-	context = {"result":result.get(),
+	context = {"result":result.get(timeout=1),
 			   "ready":result.ready(),
 			   'taskid': task_id}
 
