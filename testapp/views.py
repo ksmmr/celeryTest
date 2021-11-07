@@ -7,7 +7,7 @@ def celery_test(request):
 	task_id = add.delay(5, 5)
 
 	result = AsyncResult(task_id)
-	print('result:', result, ' : ', result.state, ' : ', result.ready())
+	print('result:', result)
 
 	context = {'result': result}
 
