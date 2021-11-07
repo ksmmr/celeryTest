@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-39^5pl8mw*x$3u&lk4qe1&^=x_7%-^uw$)=*!&a-_zdn3nibvb
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["celerytesttruss.herokuapp.com"]
 
 
 # Application definition
@@ -142,9 +142,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #追記
-CELERY_RESULT_BACKEND = "django-db"
-
-CELERY_BROKER_URL = os.environ.get("REDIS_URL","redis://localhost:6379/1")
+CELERY_BROKER_URL = os.environ.get("REDIS_URL")
+CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
 
 DEBUG = True
 
