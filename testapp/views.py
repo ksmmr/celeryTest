@@ -12,3 +12,6 @@ def celery_test(request):
 	context = {'result': result}
 
 	return render(request, 'testapp/celery_test.html', context)
+
+def boot(request):
+	return render(request,"testapp/index.html")
