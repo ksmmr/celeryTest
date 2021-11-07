@@ -14,7 +14,8 @@ def celery_test(request):
 	print('result:', result)
 
 	# TaskResultオブジェクトから実行結果を取得
-	result_object = TaskResult.objects.get(task_id=task_id)
+	#result_object = TaskResult.objects.get(task_id=task_id)
+	result_object = "resultobject"
 
 	context = {'result': result,
 			   "result_object":result_object}

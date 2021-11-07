@@ -141,12 +141,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #追記
+"""
 CACHES = {
     "default": {
          "BACKEND": "redis_cache.RedisCache",
          "LOCATION": os.environ.get('REDIS_URL'),
     }
 }
+"""
 
 CELERY_BROKER_URL = os.environ.get("REDIS_URL")
 CELERY_RESULT_BACKEND = 'django-db'
