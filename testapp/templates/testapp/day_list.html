@@ -1,0 +1,25 @@
+{% extends 'testapp/base.html' %}
+
+{% block content %}
+
+<h1>日記一覧</h1>
+
+    <table class="table">
+  <thead>
+    <tr>
+      <th>タイトル</th>
+      <th>日付</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for day in day_list %}
+    <tr>
+        <td>{{ day.title }}</td>
+      <td>{{ day.date }}</td>
+      <td>更新</td>
+        <td>削除</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
