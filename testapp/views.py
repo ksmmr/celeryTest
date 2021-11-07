@@ -10,7 +10,7 @@ def celery_test(request):
 
 	result = add.delay(5, 5)  # 非同期処理の呼び出しはこれだけでOK。後は非同期に処理が流れていく
 
-	print("===============")
+	print("add.delay終了")
 
 	task_id = result.id  # 一意に割り振られたIDが確認できる。
 
