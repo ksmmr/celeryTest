@@ -148,7 +148,7 @@ CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
 DEBUG = True
 
 try:
-    from GADjango.local_settings import *
+    from celeryTest.local_settings import *
 except ImportError:
     pass
 
