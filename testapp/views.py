@@ -8,17 +8,17 @@ from django_celery_results.models import TaskResult
 
 def celery_test(request):
 
-	task_id = add.delay(5, 5)
+	task = add.delay(5, 5)  # 非同期処理の呼び出しはこれだけでOK。後は非同期に処理が流れていく
+	print("===============")
+	task_id = task.id  # 一意に割り振られたIDが確認できる。
+	print(task_id)
+	task_model = TaskResult.objects.filter(task_id=task_id)
+	print(task_model[0].status)  # 処理開始直後のstatusを確認
 
-	result = AsyncResult(task_id)
-	print('result:', result)
+	print('task_id:', task_id)
 
-	# TaskResultオブジェクトから実行結果を取得
-	#result_object = TaskResult.objects.get(task_id=task_id)
-	result_object = "resultobject"
-
-	context = {'result': result,
-			   "result_object":result_object}
+	context = {'result': task_id,
+			   "result_object":task_model[0].status}
 
 	return render(request, 'testapp/celery_test.html', context)
 
