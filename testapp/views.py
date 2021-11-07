@@ -8,7 +8,7 @@ from django_celery_results.models import TaskResult
 
 def celery_test(request):
 
-	result = add.delay(5, 5)  # 非同期処理の呼び出しはこれだけでOK。後は非同期に処理が流れていく
+	result = add.delay()  # 非同期処理の呼び出しはこれだけでOK。後は非同期に処理が流れていく
 
 	print("add.delay終了")
 
