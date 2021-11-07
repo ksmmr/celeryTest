@@ -5,3 +5,4 @@ pip==20.2.4
 celery==5.1.2
 django-celery-results==2.2.0
 redis==3.5.3
+django-redis==5.0.0
