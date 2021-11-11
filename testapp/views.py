@@ -101,7 +101,7 @@ def show_status(request):
         task_id = request.POST.get("task_id")
         task1 = AsyncResult(task_id)
         print(task1.status)
-        return render(request, "testapp/result.html", {"result":task1.status})
+        return render(request, "testapp/result.html", {"result":task1.result})
     else:
         return HttpResponse("show_statusエラー")
 #------------------------------------------------------------------------------------------
