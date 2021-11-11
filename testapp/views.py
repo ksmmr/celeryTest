@@ -77,17 +77,6 @@ def show_progress(request):
         # progress_pkが指定されていない場合の処理
         return HttpResponse("エラー")
 
-def make_progress(pk):
-    """引数のプライマリーキーに紐づく進捗を進める"""
-    progress = get_object_or_404(Progress, pk=pk)
-    progress.now += 1
-    progress.save()
-
-def set_hikisuu(pk):
-    """引数を固定する"""
-    return functools.partial(make_progress, pk=pk)
-
-
 def do_something(request):
     print("do_something呼び出し")
     """時間のかかる関数を実行する"""
@@ -97,10 +86,9 @@ def do_something(request):
         number1 = int(request.POST.get("number1"))
         number2 = int(request.POST.get("number2"))
         gen = int(request.POST.get("gen"))
-        #result = slow_function(number1,number2,gen,set_hikisuu(progress_pk))
-        set = set_hikisuu(progress_pk)
-        print(set)
-        result = slow_function.delay(number1,number2,gen,set)
+        #result = slow_function(number1,number2,gen,progress_pk)
+
+        result = slow_function.delay(number1,number2,gen,progress_pk)
         result = result.id
         return render(request, "testapp/result.html", {"result": result})
     else:
