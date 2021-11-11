@@ -100,7 +100,7 @@ def show_status(request):
     print("show_status呼び出し")
     if "task_id" in request.POST:
         task_id = request.POST.get("task_id")
-        task1 = TaskResult.objects.filter(task_id=task_id)
+        task1 = TaskResult.objects.all()
         print(task1)
         return render(request, "testapp/result.html", {"result":task1})
     else:
