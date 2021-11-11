@@ -160,13 +160,16 @@
                 function (data) {
                     console.log("ShowStatus Data Loaded: " + data);
                     //プログレスバー更新をやめる
-                    clearInterval(timer_id);
-                    //プログレスバー部分を元の状態に戻す
-                    $("#progress").replaceWith(progresshtml)
-                    //処理結果表示
-                    $("#result").replaceWith(data)
-                    $("#start_button").attr({ "disabled": false })
-                    alert("処理完了！")
+                    if(data!="RUNNING") {
+                        clearInterval(timer_id);
+                        clearInterval(timer_id2);
+                        //プログレスバー部分を元の状態に戻す
+                        $("#progress").replaceWith(progresshtml)
+                        //処理結果表示
+                        $("#result").replaceWith(data)
+                        $("#start_button").attr({"disabled": false})
+                        alert("処理完了！")
+                    }
                 }
             );
         }

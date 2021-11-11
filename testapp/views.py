@@ -91,7 +91,7 @@ def do_something(request):
 
         result = slow_function.delay(number1,number2,gen,progress_pk)
         result = result.id
-        return render(request, "testapp/result.html", {"result": result})
+        return HttpResponse(result)
     else:
         # progress_pkが指定されていない場合の処理
         return HttpResponse("エラー")
@@ -100,11 +100,12 @@ def show_status(request):
     print("show_status呼び出し")
     if "task_id" in request.POST:
         task_id = request.POST.get("task_id")
-        task1 = TaskResult.objects.all()
-        print(task1)
-        return render(request, "testapp/result.html", {"result":task1})
-    else:
-        return HttpResponse("show_statusエラー")
+        print(task_id)
+        task1 = AsyncResult(task_id)
+        if task1.status=="SUCCESS":
+            return render(request, "testapp/result.html", {"result":task1.result})
+        else:
+            return HttpResponse("RUNNING")
 #------------------------------------------------------------------------------------------
 
 def index(request):
