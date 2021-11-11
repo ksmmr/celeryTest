@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from celery.result import AsyncResult
+from django_celery_results.models import TaskResult
 from celeryTest.tasks import add,debug_task
 from django.conf import settings
 from django.http import JsonResponse,HttpResponse
@@ -99,9 +100,9 @@ def show_status(request):
     print("show_status呼び出し")
     if "task_id" in request.POST:
         task_id = request.POST.get("task_id")
-        task1 = AsyncResult(task_id)
-        print(task1.status)
-        return render(request, "testapp/result.html", {"result":task1.result})
+        task1 = TaskResult.objects.filter(task_id=task_id)
+        print(task1)
+        return render(request, "testapp/result.html", {"result":task1})
     else:
         return HttpResponse("show_statusエラー")
 #------------------------------------------------------------------------------------------
