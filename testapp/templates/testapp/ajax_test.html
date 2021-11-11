@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <title>Ajax</title>
+          <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- jQuery,Popper.js,Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+  </head>
+  <body>
+      <div class="container">
+          <h2>数値の入力</h2>
+          <form id="ajax-number" action="{% url 'testapp:ajax_number' %}" method="POST">
+              {% csrf_token %}
+                  {{ form.form1 }}
+                  {{ form.form2 }}
+              <button type="submit" >計算</button>
+          </form>
+          <div class="result"></div>
+          <input type="text" class="js-range-slider" name="my_range" value="" />
+
+
+      <div class="card-header">
+          プログレスバーサンプル
+      </div>
+      <div class="card-body">
+          <form action="" method="POST">
+                            {% csrf_token %}
+                  {{ formgen.number1 }}
+                  {{ formgen.number2 }}
+              {{ formgen.gen }}
+          <button class="btn btn-primary col-12" id="start_button">
+                  処理の実行
+          </button>
+          </form>
+          <div id="progress">プログレスバー表示部分</div>
+          <div id="result">処理結果表示部分</div>
+
+
+
+      </div>
+      </div>
+
+ <!--Plugin CSS file with desired skin-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
+
+    <!--jQuery-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!--Plugin JavaScript file-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>
+
+    <script>
+
+    $(".js-range-slider").ionRangeSlider({
+        min: 0,
+        max: 1.0,
+        step: 0.1,
+        from: 1.0,
+        grid: true,
+        grid_snap: true,
+        skin: "big"
+    });
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        $('#ajax-number').on('submit', function(e) {
+            e.preventDefault();
+
+            $.ajax({
+                'url': '{% url "testapp:ajax_number" %}',
+                'type': 'POST',
+                'data': {
+                    'number1': $('#id_form1').val(),
+                    'number2': $('#id_form2').val(),
+                },
+                'dataType': 'json'
+            })
+            .done(function(response){
+                $('.result').prepend('<p>引き算結果：' + response.minus + '</p>');
+                $('.result').prepend('<p>足し算結果：' + response.plus + '</p>');
+            });
+        });
+
+    //プログレスバー表示部分の初期状態
+    const progresshtml = '<div id="progress">プログレスバー表示部分</div>';
+
+    //処理開始ボタンが押された時の処理
+    $("#start_button").on("click", function (event) {
+        console.log("start")
+        let timer_id = 0;
+        $("#start_button").attr({ "disabled": true })
+        //進捗管理インスタンス作成部分
+        $.post("{% url 'testapp:setup' %}", {gen:$('#id_gen').val()},
+            function (data) {
+                console.log("get");
+                console.log($('#id_number1').val());
+                console.log($('#id_number2').val());
+                console.log($('#id_gen').val());
+                let pk = data;
+                console.log("Data Loaded: " + data);
+
+                //プログレスバーを0.1秒ごとに取得開始
+                timer_id = setInterval(function () { ShowProgressBar(pk) }, 100)
+                //時間のかかる処理を開始
+                GetResult($('#id_number1').val(),$('#id_number2').val(),$('#id_gen').val(),pk)
+            }
+        );
+        //プログレスバーの取得
+        function ShowProgressBar(progress_pk) {
+            $.post("{% url 'testapp:show_progress' %}", { progress_pk: progress_pk },
+                function (data) {
+                    //console.log("Data Loaded: " + data);
+                    $("#progress").replaceWith(data)
+                }
+            );
+        }
+        //時間のかかる処理
+        function GetResult(number1,number2,gen,progress_pk) {
+            $.post("{% url 'testapp:do_something' %}", { progress_pk: progress_pk,number1: number1,
+                    number2: number2,gen:gen},
+                function (data) {
+                    console.log("Data Loaded: " + data);
+                    //プログレスバー更新をやめる
+                    clearInterval(timer_id);
+                    //プログレスバー部分を元の状態に戻す
+                    $("#progress").replaceWith(progresshtml)
+                    //処理結果表示
+                    $("#result").replaceWith(data)
+                    $("#start_button").attr({ "disabled": false })
+                    alert("処理完了！")
+                }
+            );
+        }
+    });
+    </script>
+  </body>
+</html>
