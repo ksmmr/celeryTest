@@ -100,9 +100,9 @@ def show_status(request):
     if "task_id" in request.POST:
         task_id = request.POST.get("task_id")
         task1 = AsyncResult(task_id)
-        return render(request, "testapp/result.html", {"status":task1.status})
+        print(task1.status)
+        return render(request, "testapp/result.html", {"result":task1.status})
     else:
-        # progress_pkが指定されていない場合の処理
         return HttpResponse("show_statusエラー")
 #------------------------------------------------------------------------------------------
 
