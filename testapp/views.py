@@ -98,7 +98,9 @@ def do_something(request):
         number2 = int(request.POST.get("number2"))
         gen = int(request.POST.get("gen"))
         #result = slow_function(number1,number2,gen,set_hikisuu(progress_pk))
-        result = slow_function.delay(number1,number2,gen,set_hikisuu(progress_pk))
+        set = set_hikisuu(progress_pk)
+        print(set)
+        result = slow_function.delay(number1,number2,gen,set)
         result = result.id
         return render(request, "testapp/result.html", {"result": result})
     else:
