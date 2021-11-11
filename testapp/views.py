@@ -97,7 +97,8 @@ def do_something(request):
         number1 = int(request.POST.get("number1"))
         number2 = int(request.POST.get("number2"))
         gen = int(request.POST.get("gen"))
-        result = slow_function(number1,number2,gen,set_hikisuu(progress_pk))
+        #result = slow_function(number1,number2,gen,set_hikisuu(progress_pk))
+        result = slow_function.delay(number1,number2,gen,set_hikisuu(progress_pk))
         return render(request, "testapp/result.html", {"result": result})
     else:
         # progress_pkが指定されていない場合の処理
