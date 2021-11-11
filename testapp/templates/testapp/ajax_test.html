@@ -128,6 +128,7 @@
     $("#start_button").on("click", function (event) {
         console.log("start")
         let timer_id = 0;
+        let timer_id2 = 0;
         $("#start_button").attr({ "disabled": true })
         //進捗管理インスタンス作成部分
         $.post("{% url 'testapp:setup' %}", {gen:$('#id_gen').val()},
@@ -154,12 +155,10 @@
                 }
             );
         }
-        //時間のかかる処理
-        function GetResult(number1,number2,gen,progress_pk) {
-            $.post("{% url 'testapp:do_something' %}", { progress_pk: progress_pk,number1: number1,
-                    number2: number2,gen:gen},
+        function ShowStatus(task_id){
+            $.post("{% url 'testapp:show_status' %}", {task_id:task_id},
                 function (data) {
-                    console.log("Data Loaded: " + data);
+                    console.log("ShowStatus Data Loaded: " + data);
                     //プログレスバー更新をやめる
                     clearInterval(timer_id);
                     //プログレスバー部分を元の状態に戻す
@@ -168,6 +167,16 @@
                     $("#result").replaceWith(data)
                     $("#start_button").attr({ "disabled": false })
                     alert("処理完了！")
+                }
+            );
+        }
+        //時間のかかる処理
+        function GetResult(number1,number2,gen,progress_pk) {
+            $.post("{% url 'testapp:do_something' %}", { progress_pk: progress_pk,number1: number1,
+                    number2: number2,gen:gen},
+                function (data) {
+                    console.log("GetResult Data Loaded: " + data);
+                    timer_id2 = setInterval(function () { ShowStatus(data) }, 1000)
                 }
             );
         }
